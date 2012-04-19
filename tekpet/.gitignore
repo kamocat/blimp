@@ -1,0 +1,12 @@
+# ignore compiled files
+obj/
+*.sym
+*.map
+*.lss
+*.hex
+*.elf
+*.eep
+.dep/
+
+# Ignore VIM swap files
+*.swp
