@@ -34,17 +34,22 @@ void initialize (void) {
 	 */
 	TCCR1B = 0b00011001;
 
-	/* Set TOP (high byte, then low byte).  We want 16,000 */
-	ICR1H = 0x40;
-	ICR1L = 0x10;
+	/* Set TOP.  We want 16,000, or 16 seconds */
+	ICR1H = 0x4000;
+
+
+	/* Make sure the timer isn't disabled in Power Reduction Mode */
+	PRR0 = 0;
 
 }
 
 
 void update_pwm( char a, char b, char c ) {
-	/* Set high and low bytes for PWM A */
-	OCR1AH = 16 + ( a >> 4 );
-	OCR1AL = a << 4;
+	/* Use a 16 bit integer to do the 16 bit write */ 
+	unsigned int tmp = (a << 4);
+
+	/* Write out the PWM, so it's between 1 and 2ms */
+	OCR1A = 16 + tmp;
 
 	/* Implement the others after we check that this works */
 
