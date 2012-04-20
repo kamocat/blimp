@@ -32,19 +32,19 @@ void initialize (void) {
 	 * Set PWM top to be ICR1
 	 * Set clock to be system clock, prescaled to 1/256
 	 */
-	TCCR1B = 0b00011100;
+	TCCR1B = 0b00011001;
 
-	/* Set TOP (high byte, then low byte) */
-	ICR1 = 0xFF;
-	ICR1 = 0xFF;
+	/* Set TOP (high byte, then low byte).  We want 16,000 */
+	ICR1H = 0x40;
+	ICR1L = 0x10;
 
 }
 
 
 void update_pwm( char a, char b, char c ) {
 	/* Set high and low bytes for PWM A */
-	OCR1A = 16 | ( a >> 4 );
-	OCR1A = a << 4;
+	OCR1AH = 16 + ( a >> 4 );
+	OCR1AL = a << 4;
 
 	/* Implement the others after we check that this works */
 
@@ -57,7 +57,7 @@ int main( void ) {
 
 	char i = 0;
 	while( 1 ) {
-		update_pwm( i, 0, 255);
+		update_pwm( i, 0, 0 );
 		i += 1;
 		_delay_ms( 16 );
 	}
