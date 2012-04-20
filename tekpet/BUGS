@@ -1,1 +1,12 @@
-Outputs between 4 and 8ms.  Weird.
+This file is for recording the bugs.
+As you find a fix for them, it's not neccesary to delete the old comments,
+and is often more useful to instead explain what you did to fix it.
+
+Servo control works on special pins 0 - 2, using Timer1.
+(Include "rc_servo.h" to use the functions)
+To be perfectly honest, I don't know why it is working the way it does.
+If you have the time to test it, feel free to fix it so it makes more sense.
+
+
+
+Regular motor control is currently not yet implemented.
