@@ -10,3 +10,4 @@ obj/
 
 # Ignore VIM swap files
 *.swp
+._*
