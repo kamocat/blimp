@@ -9,4 +9,9 @@ If you have the time to test it, feel free to fix it so it makes more sense.
 
 
 
-Regular motor control is currently not yet implemented.
+DC motor control works partially.
+The timers are operational, although slower than expected.
+The "run motors" function is untested, as are the direction and mode
+features of the motor controller.
+Also, the motor controller seems to shut off above 300mA, although it is
+rated for 2.4A.
