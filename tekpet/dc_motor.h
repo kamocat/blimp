@@ -7,12 +7,12 @@
 
 /* 
  * IO Description:
- * Enable1		PB4
- * Enable2		PD1
- * Direction1	PC0
- * Direction2	PC1
- * Mode1		PC2
- * Mode2		PC3
+ * Enable2		PB4
+ * Enable1		PD1
+ * Direction2	PC0
+ * Direction1	PC1
+ * Mode2		PC2
+ * Mode1		PC3
  *
  */
 
@@ -65,14 +65,28 @@ void init_dcmotors( char mode ) {
 
 
 /*
+ * This function takes the absolute value of the speed, and increases
+ * the magnitude by one bit
+ */
+uint8_t unsigned_speed( int8_t signed_speed ) {
+	if( signed_speed == -127 ) {
+		signed_speed = 127;
+	} else if( signed_speed < 0 ) {
+		signed_speed = -signed_speed;
+	}
+	return signed_speed << 1;
+}
+
+
+/*
  * If you can figure out a good way to not have duplicate code here,
- * please change this to be more elegant.  Thanks! -- Marshal
+ * please change this to be more elegant.  Thanks! -Marshal
  */
 void run_dcmotors( int8_t m1, int8_t m2 ) {
 
-	/******** Motor 1 *************/
+	/******** Motor 2 *************/
 	/* Update the speed */
-	OCR2A = (+m1)<<1;
+	OCR2A = unsigned_speed( m1 );
 
 	/* Update the direction */
 	if( m1 < 0 ) {
@@ -82,16 +96,17 @@ void run_dcmotors( int8_t m1, int8_t m2 ) {
 	}
 	
 
-	/*********** Motor 2 ************/
+	/*********** Motor 1 ************/
 	/* Update the speed */
-	OCR2B = (+m2)<<1;
+	OCR2B = unsigned_speed( m2 );
 
 	/* Update the direction */
-	if( m2 < 0 ) {
+	if( m1 < 0 ) {
 		PORTC &= ~(0b10);
 	} else {
 		PORTC |= 0b10;
 	}
+
 }
 
 #endif

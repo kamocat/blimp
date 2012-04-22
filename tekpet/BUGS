@@ -9,9 +9,13 @@ If you have the time to test it, feel free to fix it so it makes more sense.
 
 
 
-DC motor control works partially.
+DC motor control works.
 The timers are operational, although slower than expected.
-The "run motors" function is untested, as are the direction and mode
-features of the motor controller.
-Also, the motor controller seems to shut off above 300mA, although it is
-rated for 2.4A.
+Some issues that were fixed:
+Motor 1 and 2 are mislabeled on the PCB silkscreen.  (Motor1 is labelled
+Motor2, and vice versa).  So, I changed the code to match the silkscreen, 
+rather than the schematic.
+The motor controller operates between 8 and 30v.  So, it was having issues
+with my 7.2v battery pack.
+The "run motors" function is fixed so that it will take int8_t, and
+correctly deal with the polarity.
