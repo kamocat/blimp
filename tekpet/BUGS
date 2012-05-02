@@ -10,3 +10,8 @@ If you have the time to test it, feel free to fix it so it makes more sense.
 
 
 Regular motor control is currently not yet implemented.
+
+
+Communication is not fully tested.  The UART works, but the message handling
+needs to be verified.  The receiving is done using interrupts, but a send
+queue still needs to be implemented.

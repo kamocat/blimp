@@ -18,7 +18,7 @@
 
 #define SERVO_CENTER 0x05E0
 
-void init_servos (void) {
+uint8_t init_servos (void) {
 	/*
 	 * We are using port B here for PWM outputs on Timer/Counter1.
 	 * Bits 5:7 are PWM outputs A:C, so those are the ones we enable
@@ -65,5 +65,14 @@ void update_servos( uint8_t a, uint8_t b, uint8_t c ) {
 	OCR1C = SERVO_CENTER + c - 0x80;
 
 }
+
+uint8_t set_servoA( uint8_t position ) {
+	/* Use a 16 bit integer to do the 16 bit write */ 
+	signed int tmp = ((int)a << 0) - 0x0080;
+
+	/* Write out the PWM, so it's between 1 and 2ms */
+	OCR1A = SERVO_CENTER + tmp;
+}
+
 
 #endif
