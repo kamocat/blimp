@@ -46,6 +46,7 @@ uint8_t init_servos (void) {
 	/* Make sure the timer isn't disabled in Power Reduction Mode */
 	PRR0 = 0;
 
+	return 0;
 }
 
 
@@ -66,12 +67,14 @@ void update_servos( uint8_t a, uint8_t b, uint8_t c ) {
 
 }
 
-uint8_t set_servoA( uint8_t position ) {
+int set_servoA( uint8_t position ) {
 	/* Use a 16 bit integer to do the 16 bit write */ 
-	signed int tmp = ((int)a << 0) - 0x0080;
+	signed int tmp = ((int)position << 0) - 0x0080;
 
 	/* Write out the PWM, so it's between 1 and 2ms */
 	OCR1A = SERVO_CENTER + tmp;
+
+	return OCR1A;
 }
 
 

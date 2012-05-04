@@ -15,3 +15,10 @@ Regular motor control is currently not yet implemented.
 Communication is not fully tested.  The UART works, but the message handling
 needs to be verified.  The receiving is done using interrupts, but a send
 queue still needs to be implemented.
+
+On the wunderboard stuff, I'm having significant issues not making columns
+bleed together when it cycles through.  I don't know why this is an issue
+now (though it hasn't been in the past).  To alleviate this and at least
+make the columns readable, I have slowed it down as much as possible
+(a little slower than 4hz).  It is also displaying amber, though it
+should be displaying green.
