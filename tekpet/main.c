@@ -125,20 +125,31 @@ ISR( TIMER0_COMPA_vect ) {
 
 int main( void ) {
 	init();
-	init_servos();
 	init_UART();
 #ifdef WUNDERBOARD
 	/* Set up timer0 to count up to OCRA, then reset */
 	TCCR0A = 0x02;
 
 	/* 
-	 * Right now bleed from column to column is a significant issue,
-	 * so we slow down the update as much as possible 
+	 * 500us update time is fast enough to avoid flicker,
+	 * so the display will be nice and smooth, without
+	 * taking too much processor time.
+	 * To get this, we use 1/8 prescaler, and count
+	 * to 63.  (Counting to 62.5 would be more accurate,
+	 * but it isn't critical here, and besides, that's
+	 * not an integer)
 	 */
-	TCCR0B = 0x05;	// prescale to 1/1024
-	OCR0A = 255;
+	TCCR0B = 0x02;
+	OCR0A = 63;
 
 	TIMSK0 = 0b010;	// interrupt on timer compare A
+#else
+	/* 
+	 * The PWM outputs on Timer1 mess with the LED display, so we only
+	 * enable them if we're not actually on the Wunerboard
+	 */
+	init_servos();
+
 #endif
 
 	

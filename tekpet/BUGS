@@ -22,3 +22,8 @@ now (though it hasn't been in the past).  To alleviate this and at least
 make the columns readable, I have slowed it down as much as possible
 (a little slower than 4hz).  It is also displaying amber, though it
 should be displaying green.
+FIXED:
+The servo control was overriding the values written to PORTB, because its
+output compares have priority over regular outputs.  So, I used the
+preprocessor to only run init_servos() when WUNDERBOARD is not defined.
+This fixed it, and now we have a low-flicker update that is easy to read.
