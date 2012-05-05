@@ -56,7 +56,7 @@ void init_servos (void) {
  * This sets servo A to be centered.
  * There are three servos: OCR1A, OCR1B, and OCR1C.
  */
-uint8_t set_servo( uint8_t angle, uint16_t *servo ) {
+uint8_t set_servo( int8_t angle, uint16_t *servo ) {
 
 
 	/* 
@@ -65,7 +65,7 @@ uint8_t set_servo( uint8_t angle, uint16_t *servo ) {
 	 * servos, as does the servo center.  
 	 * This feature could be added without too much difficulty.
 	 */
-	*servo = SERVO_CENTER + (int8_t)(angle - 128) * 6;
+	*servo = SERVO_CENTER + (int16_t)(angle) * 6;
 
 	return 0;
 }
