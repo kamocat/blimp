@@ -3,14 +3,15 @@
  Currently we are testing to make sure servo control works
  */
 
+/** Constants */
+#define F_CPU 1000000U
+#define MOTOR_DIVIDE 3
+
 /** Includes */
 #include <avr/io.h>
 #include <util/delay.h>
 #include "rc_servo.h"	// enables sevo control
 #include "dc_motor.h"	// enables control of DC motors
-
-/** Constants */
-#define F_CPU 1000000U
 
 /** Global Variables */
 
@@ -28,7 +29,7 @@ int main( void ) {
 		set_servo( i, &OCR1A );
 		run_dcmotors( i, i );
 
-		_delay_ms( 10 );
+		_delay_ms( 100 );
 
 		switch( i ) {
 			case -127:
