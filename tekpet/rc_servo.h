@@ -16,7 +16,7 @@
 #ifndef TEKPET_SERVO
 #define TEKPET_SERVO
 
-#define SERVO_CENTER 0x05E0
+#define SERVO_CENTER 0x0580
 
 void init_servos (void) {
 	/*
@@ -49,21 +49,34 @@ void init_servos (void) {
 }
 
 
-void update_servos( uint8_t a, uint8_t b, uint8_t c ) {
-	/* Use a 16 bit integer to do the 16 bit write */ 
-	signed int tmp = ((int)a << 0) - 0x0080;
+/*
+ * This function sets an individual servo, using the pointer to the
+ * address of the servo.  Here's an example:
+ * set_servo( 128, &OCR1A );
+ * This sets servo A to be centered.
+ * There are three servos: OCR1A, OCR1B, and OCR1C.
+ */
+uint8_t set_servo( uint8_t angle, uint16_t *servo ) {
 
-	/* Write out the PWM, so it's between 1 and 2ms */
-	OCR1A = SERVO_CENTER + tmp;
 
 	/* 
-	 * Implement the others after we check that this works 
-	 * This is a simplified version of the code above
+	 * Write out the PWM, so it's between 1 and 2ms 
+	 * This probably needs to be recalibrated when you switch
+	 * servos, as does the servo center.  
+	 * This feature could be added without too much difficulty.
 	 */
+	*servo = SERVO_CENTER + (int8_t)(angle - 128) * 6;
 
-	OCR1B = SERVO_CENTER + b - 0x80;
-	OCR1C = SERVO_CENTER + c - 0x80;
+	return 0;
+}
 
+/*
+ * This function disables the servo, by stopping output to it.
+ * When you use set_servo, it will start the servo again
+ */
+uint8_t stop_servo( uint16_t *servo ) {
+	*servo = 0;
+	return 0;
 }
 
 #endif
