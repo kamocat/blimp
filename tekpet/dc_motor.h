@@ -6,13 +6,19 @@
 
 
 /* 
+ * The board does not match the chip;
+ * OCR2A goes to M2, and OCR2B goes to M1.
+ * However, since the board can't be changed, we're compensating for that
+ * in the code by flipping the two.
+ *
+ *
  * IO Description:
- * Enable1		PB4
- * Enable2		PD1
- * Direction1	PC0
- * Direction2	PC1
- * Mode1		PC2
- * Mode2		PC3
+ * Enable1		PD1
+ * Enable2		PB4
+ * Direction1	PC1
+ * Direction2	PC0
+ * Mode1		PC3
+ * Mode2		PC2
  *
  */
 
@@ -85,29 +91,29 @@ uint8_t abs_motor_speed( int8_t speed ) {
  * please change this to be more elegant.  Thanks! -Marshal
  */
 void run_dcmotors( int8_t m1, int8_t m2 ) {
+	
 
-
-	/******** Motor 1 *************/
+	/*********** Motor 1 ************/
 	/* Update the speed */
-	OCR2A = abs_motor_speed( m1 );
+	OCR2B = abs_motor_speed( m1 );
 
 	/* Update the direction */
 	if( m1 < 0 ) {
-		PORTC &= ~(0b01);
-	} else {
-		PORTC |= 0b01;
-	}
-	
-
-	/*********** Motor 2 ************/
-	/* Update the speed */
-	OCR2B = abs_motor_speed( m2 );
-
-	/* Update the direction */
-	if( m2 < 0 ) {
 		PORTC &= ~(0b10);
 	} else {
 		PORTC |= 0b10;
+	}
+
+
+	/******** Motor 2 *************/
+	/* Update the speed */
+	OCR2A = abs_motor_speed( m2 );
+
+	/* Update the direction */
+	if( m2 < 0 ) {
+		PORTC &= ~(0b01);
+	} else {
+		PORTC |= 0b01;
 	}
 }
 
