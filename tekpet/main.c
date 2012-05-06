@@ -50,7 +50,7 @@ ISR( BADISR_vect ) {
 ISR( USART1_RX_vect ) {
 	byte_received = UDR1;	// copy the data before it goes away
 	// Use -128 to signal a new message
-	if( byte_received == -128 ) {
+	if( byte_received == 0x80 ) {
 		// Reset the counter and clear the array
 		for( byte_index = 0; byte_index < MSG_LENGTH; ++byte_index ) {
 			uart_rcvd[ (int) byte_index ] = 0;
@@ -67,7 +67,7 @@ ISR( USART1_RX_vect ) {
 			rspeed = uart_rcvd[1];
 			inc_servo( uart_rcvd[2], &servo_angle );
 			
-			/* Reset the watchdog */
+			// Reset the watchdog
 		}
 	}
 

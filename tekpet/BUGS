@@ -6,6 +6,9 @@ Servo control works on special pins 0 - 2, using Timer1.
 (Include "rc_servo.h" to use the functions)
 To be perfectly honest, I don't know why it is working the way it does.
 If you have the time to test it, feel free to fix it so it makes more sense.
+The servo increment function also works properly.
+IMPORTANT: If you change servos, you may need to recalibrate the function
+so it centers properly and gives values over the full range.
 
 
 DC motors work, and have a define to scale them down from full voltage.
@@ -16,6 +19,6 @@ by USB when you want to program it, and then switch on the main power
 again when you are ready.
 
 
-Communication is not fully tested.  The UART works, but the message handling
-needs to be verified.  The receiving is done using interrupts, but a send
+Communication is adequately functional.  The UART receive works, including 
+the message handling.  The receiving is done using interrupts, but a send 
 queue still needs to be implemented.
