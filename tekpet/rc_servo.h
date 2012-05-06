@@ -18,7 +18,7 @@
 
 #define SERVO_CENTER 0x0580
 
-void init_servos (void) {
+uint8_t init_servos (void) {
 	/*
 	 * We are using port B here for PWM outputs on Timer/Counter1.
 	 * Bits 5:7 are PWM outputs A:C, so those are the ones we enable
@@ -46,6 +46,28 @@ void init_servos (void) {
 	/* Make sure the timer isn't disabled in Power Reduction Mode */
 	PRR0 = 0;
 
+	return 0;
+
+}
+
+/* 
+ * This function is used for user interface stuff - it will
+ * increment or decrement the servo value.  Instead of just
+ * letting a rollover happen, it will detect that and set it
+ * to the appropriate extreme value (max or min).
+ */
+int8_t inc_servo( int8_t increment, int8_t *servo ) {
+	int8_t new_angle = *servo + increment;
+
+	/* Catch overflows */
+	if( (increment > 0) && (new_angle < *servo) ) {
+		new_angle = 127;
+	} else if( (increment < 0) && (new_angle > *servo) ) {
+		new_angle = -128;
+	}
+	
+	*servo = new_angle;
+	return new_angle;
 }
 
 
@@ -56,9 +78,7 @@ void init_servos (void) {
  * This sets servo A to be centered.
  * There are three servos: OCR1A, OCR1B, and OCR1C.
  */
-uint8_t set_servo( int8_t angle, uint16_t *servo ) {
-
-
+uint8_t set_servo( int8_t angle, volatile uint16_t *servo ) {
 	/* 
 	 * Write out the PWM, so it's between 1 and 2ms 
 	 * This probably needs to be recalibrated when you switch
@@ -78,5 +98,6 @@ uint8_t stop_servo( uint16_t *servo ) {
 	*servo = 0;
 	return 0;
 }
+
 
 #endif

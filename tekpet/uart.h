@@ -1,10 +1,23 @@
 /*
  * This header allows communication over serial (at least, one way)
  */
-#include <stdlib.h> // for malloc
 #include <string.h>	// for string manipulation functions
 #include <stdio.h>	// for sprintf
 #include <avr/io.h>	// for register macros
+
+#ifdef INTERRUPT_DRIVEN_UART
+#include <avr/interrupt.h> // allows interrupts to be used
+
+#ifndef MSG_LENGTH
+#define MSG_LENGTH 8
+#endif
+
+uint8_t byte_received;	// data copied from the UART data register
+uint8_t uart_rcvd[MSG_LENGTH];	// this data is live, and unsafe
+uint8_t byte_index = 255;	// start off disabled
+uint8_t buffered_rcv[MSG_LENGTH];	// this data is only updated after vefiricaton
+#endif
+
 
 
 
@@ -23,10 +36,6 @@
  * is used in the header to determine whether to enable the UART
  * RCV interrupts.  (Transmit is currently not interrupt-driven).
  */
-uint8_t uart_rcvd[8];	// this data is live, and unsafe
-uint8_t byte_index = 255;	// start off disabled
-uint8_t byte_received;
-uint8_t buffered_rcv[8];	// this data is only updated after vefiricaton
 
 ISR( BADISR_vect ) {
 	// Do nothing
@@ -113,10 +122,15 @@ char send_byte(unsigned char data){
  * If no byte is received, this returns 0.
  */
 char get_byte( void ) {
+#ifdef INTERRUPT_DRIVEN_UART
+	char received = byte_received;
+	byte_received = 0;
+#else
 	char received = 0;
 	if( UCSR1A & 1<<RXC1) {
 		received = UDR1;
 	}
+#endif
 	return received;
 }
 

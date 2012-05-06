@@ -14,3 +14,8 @@ wherever it is, so sometimes the motor will get full voltage for a couple
 seconds.  You can prevent this by powering the microcontroller soleley
 by USB when you want to program it, and then switch on the main power
 again when you are ready.
+
+
+Communication is not fully tested.  The UART works, but the message handling
+needs to be verified.  The receiving is done using interrupts, but a send
+queue still needs to be implemented.
