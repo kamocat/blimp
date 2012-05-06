@@ -1,7 +1,0 @@
-# ignore compiled files
-dep/
-*.o
-*.eep
-*.elf
-*.hex
-*.map

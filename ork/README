@@ -1,7 +1,0 @@
-This is the code for the ATmega32U4, which is the controller we use
-on our blimp.  You can find information about the ORK board it is mounted
-to here: http://groups.engr.oregonstate.edu/osurc/ork/index.php
-
-The idea is that the ATmega will recieve commands over serial from an
-Xbee module, and control several motors and servos to control the motion
-of the blimp.
