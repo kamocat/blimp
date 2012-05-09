@@ -8,8 +8,10 @@
 #define MOTOR_DIVIDE 3	// only use 1/3 full voltage
 #define INTERRUPT_DRIVEN_UART	// use interrupts for UART receive
 #define MSG_LENGTH 3	// there are only 3 bytes in our message
+#define WUNDERBOARD // we are testing on the wunderbaord right now
 
 /** Includes */
+#include "watchdog.h"
 #include <avr/io.h>
 #include <util/delay.h>
 #include "rc_servo.h"	// enables sevo control
@@ -24,8 +26,15 @@ int8_t servo_angle;
 /** Functions */
 
 uint8_t init( void ) {
+#ifdef WUNDERBOARD
+	DDRB = 0b11000000;
+	PORTB = 0b01000000;	//red
+	DDRC = 0xFF;	// LEDs are all outputs
+	PORTB = 0x02;	// display SOMETHING so we know it works
+#else
 	init_servos();
 	init_dcmotors( 0 );
+#endif
 	init_UART();
 
 	// start interrupts
@@ -68,6 +77,8 @@ ISR( USART1_RX_vect ) {
 			inc_servo( uart_rcvd[2], &servo_angle );
 			
 			// Reset the watchdog
+			__watchdog_reset();
+			PORTC = 0x01;
 		}
 	}
 
@@ -75,6 +86,19 @@ ISR( USART1_RX_vect ) {
 }
 /*********** End interrupt-driven UART ***********/
 #endif
+
+
+ISR( WDT_vect ) {
+	/* 
+	 * The watchdog has timed out, which means __watchdog_reset() hasn't 
+	 * been called recently, so something isn't happening as often as we 
+	 * think it should (depending on where __watchdog_reset() is called).
+	 * Do something to respond to that:
+	 */
+	PORTC = 0xaa;
+
+
+}
 
 
 int main( void ) {
