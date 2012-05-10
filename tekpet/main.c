@@ -25,7 +25,7 @@ int8_t servo_angle;
 
 uint8_t init( void ) {
 	init_servos();
-	init_dcmotors( 0 );
+	init_dcmotors( 1 );
 	init_UART();
 
 	// start interrupts
