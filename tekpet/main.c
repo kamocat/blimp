@@ -9,6 +9,7 @@
 #define INTERRUPT_DRIVEN_UART	// use interrupts for UART receive
 #define MSG_LENGTH 3	// there are only 3 bytes in our message
 #define WUNDERBOARD // we are testing on the wunderbaord right now
+#define WD_TIMEOUT 8000	// watchdog timeout after 1s
 
 /** Includes */
 #include "watchdog.h"
@@ -28,14 +29,20 @@ int8_t servo_angle;
 uint8_t init( void ) {
 #ifdef WUNDERBOARD
 	DDRB = 0b11000000;
-	PORTB = 0b01000000;	//red
 	DDRC = 0xFF;	// LEDs are all outputs
-	PORTB = 0x02;	// display SOMETHING so we know it works
+
+	/* Clear display */
+	PORTB = 0b11000000;
+	PORTC = 0;
+
+	PORTB = 0b01000000;	//only display red
+	PORTC = 0x80;	// display SOMETHING so we know it works
 #else
 	init_servos();
 	init_dcmotors( 0 );
 #endif
 	init_UART();
+	init_watchdog();
 
 	// start interrupts
 	sei();
@@ -58,6 +65,9 @@ ISR( BADISR_vect ) {
 
 ISR( USART1_RX_vect ) {
 	byte_received = UDR1;	// copy the data before it goes away
+			// Reset the watchdog
+			wdt_reset();
+			PORTC = 0xF0;
 	// Use -128 to signal a new message
 	if( byte_received == 0x80 ) {
 		// Reset the counter and clear the array
@@ -76,9 +86,6 @@ ISR( USART1_RX_vect ) {
 			rspeed = uart_rcvd[1];
 			inc_servo( uart_rcvd[2], &servo_angle );
 			
-			// Reset the watchdog
-			__watchdog_reset();
-			PORTC = 0x01;
 		}
 	}
 
@@ -95,7 +102,8 @@ ISR( WDT_vect ) {
 	 * think it should (depending on where __watchdog_reset() is called).
 	 * Do something to respond to that:
 	 */
-	PORTC = 0xaa;
+	PORTC = 0x0C;
+	send_string("WDT ");
 
 
 }
@@ -103,6 +111,7 @@ ISR( WDT_vect ) {
 
 int main( void ) {
 	init();
+	send_string("Device was reset\r\n");
 
 	while( 1 ) {
 		/* Motor control not merged yet */

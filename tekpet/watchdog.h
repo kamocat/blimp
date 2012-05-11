@@ -5,34 +5,42 @@
  * WD_TIMEOUT is the timeout in miliseconds, rounded up.
  */
 
-#include <avr/io.h>
+#include <avr/wdt.h>
+#include <avr/interrupt.h>
 
-#ifdef AT90USB686_WATCHDOG
+#ifndef AT90USB686_WATCHDOG
 #define AT90USB686_WATCHDOG
 
-uint8_t init_wd( void ) {
+uint8_t init_watchdog( void ) {
 #ifdef WD_TIMEOUT
 	uint8_t prescale = 0;
-	for( uint16_t timeout = ((WD_TIMEOUT - 1) >> 1); 
-			timeout; timeout >>= 1 ) {
+	uint16_t timeout = ((WD_TIMEOUT - 1) >> 1);
+	for( ; (timeout != 0); timeout >>= 1 ) {
 		++prescale;
 	}
 
 	/* 
 	 * Make sure it is a valid value, even if the user entered an
 	 * excessively large number */
-	prescale = (prescale > 9) ? 9 : prescale;
+	prescale = (prescale > 7) ? 7 : prescale;
 
 
 	/* Set watchdog to interrupt only, not system reset */
-	WDTCSR = 0b01100000 | prescale;
+
+	wdt_reset();
+	WDTCSR |= (1<<WDCE) | (1<<WDE);
+	WDTCSR = (1<<WDIE) | (7);
+	// wdt_enable( WDTO_2S );
 
 #else
 	/* Disable the watchdog */
-	WDTCSR = 0b00100000;
+	// WDTCSR = 0b00100000;
+	wdt_disable();
 
 #endif
+	return 0;
 }
+#endif
 
 
 #ifdef DO_NOT_DEFINE
@@ -55,5 +63,4 @@ ISR( WDT_vect ) {
 
 }
 
-#endif
 #endif
