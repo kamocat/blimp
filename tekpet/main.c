@@ -9,7 +9,7 @@
 #define INTERRUPT_DRIVEN_UART	// use interrupts for UART receive
 #define MSG_LENGTH 3	// there are only 3 bytes in our message
 #define WUNDERBOARD // we are testing on the wunderbaord right now
-#define WD_TIMEOUT 8000	// watchdog timeout after 1s
+#define WD_TIMEOUT 1000 // watchdog timeout after about 1 second
 
 /** Includes */
 #include "watchdog.h"
@@ -27,6 +27,9 @@ int8_t servo_angle;
 /** Functions */
 
 uint8_t init( void ) {
+	init_watchdog();
+	init_UART();
+
 #ifdef WUNDERBOARD
 	DDRB = 0b11000000;
 	DDRC = 0xFF;	// LEDs are all outputs
@@ -37,12 +40,13 @@ uint8_t init( void ) {
 
 	PORTB = 0b01000000;	//only display red
 	PORTC = 0x80;	// display SOMETHING so we know it works
+
+	/* Let programmer know what happened */
+	send_string("Device was reset\r\n");
 #else
 	init_servos();
 	init_dcmotors( 0 );
 #endif
-	init_UART();
-	init_watchdog();
 
 	// start interrupts
 	sei();
@@ -65,9 +69,6 @@ ISR( BADISR_vect ) {
 
 ISR( USART1_RX_vect ) {
 	byte_received = UDR1;	// copy the data before it goes away
-			// Reset the watchdog
-			wdt_reset();
-			PORTC = 0xF0;
 	// Use -128 to signal a new message
 	if( byte_received == 0x80 ) {
 		// Reset the counter and clear the array
@@ -85,7 +86,9 @@ ISR( USART1_RX_vect ) {
 			lspeed = uart_rcvd[0];
 			rspeed = uart_rcvd[1];
 			inc_servo( uart_rcvd[2], &servo_angle );
-			
+
+			// Reset the watchdog
+			wdt_reset();
 		}
 	}
 
@@ -97,13 +100,16 @@ ISR( USART1_RX_vect ) {
 
 ISR( WDT_vect ) {
 	/* 
-	 * The watchdog has timed out, which means __watchdog_reset() hasn't 
+	 * The watchdog has timed out, which means wdt_reset() hasn't 
 	 * been called recently, so something isn't happening as often as we 
-	 * think it should (depending on where __watchdog_reset() is called).
+	 * think it should (depending on where wds_reset() is called).
 	 * Do something to respond to that:
 	 */
-	PORTC = 0x0C;
+#ifdef WUNDERBOARD
 	send_string("WDT ");
+#else
+
+#endif
 
 
 }
@@ -111,7 +117,6 @@ ISR( WDT_vect ) {
 
 int main( void ) {
 	init();
-	send_string("Device was reset\r\n");
 
 	while( 1 ) {
 		/* Motor control not merged yet */
