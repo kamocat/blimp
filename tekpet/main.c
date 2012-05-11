@@ -108,7 +108,17 @@ ISR( WDT_vect ) {
 #ifdef WUNDERBOARD
 	send_string("WDT ");
 #else
-
+	/*
+	 * We lost communication.
+	 * Since this blimp is naturally heavy, we can just shut off the
+	 * motors, and it should come down.  However, if it turns out the
+	 * craft doesn't sink fast enough, we can change this to actually
+	 * drive the motors down.  These values won't be overwritten by
+	 * anything else until a new message is received.
+	 */
+	servo_angle = 0;
+	lspeed = 0;
+	rspeed = 0;
 #endif
 
 
