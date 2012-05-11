@@ -45,7 +45,7 @@ uint8_t init( void ) {
 	send_string("Device was reset\r\n");
 #else
 	init_servos();
-	init_dcmotors( 0 );
+	init_dcmotors( 1 );
 #endif
 
 	// start interrupts
@@ -86,7 +86,7 @@ ISR( USART1_RX_vect ) {
 			lspeed = uart_rcvd[0];
 			rspeed = uart_rcvd[1];
 			inc_servo( uart_rcvd[2], &servo_angle );
-
+			
 			// Reset the watchdog
 			wdt_reset();
 		}
