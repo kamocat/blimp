@@ -8,7 +8,7 @@
 #define MOTOR_DIVIDE 3	// only use 1/3 full voltage
 #define INTERRUPT_DRIVEN_UART	// use interrupts for UART receive
 #define MSG_LENGTH 3	// there are only 3 bytes in our message
-#define WUNDERBOARD // we are testing on the wunderbaord right now
+// #define WUNDERBOARD // we are testing on the tekpet right now
 #define WD_TIMEOUT 1000 // watchdog timeout after about 1 second
 
 /** Includes */
