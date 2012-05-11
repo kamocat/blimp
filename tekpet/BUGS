@@ -12,6 +12,8 @@ so it centers properly and gives values over the full range.
 
 
 DC motors work, and have a define to scale them down from full voltage.
+However, due to the nature of the PWM generator, they can't shut quite
+completely off.  (When OCR0A is 0, the duty cycle is 1/256).
 Be careful when you're reprogramming, though.  It stops the microcontroller
 wherever it is, so sometimes the motor will get full voltage for a couple
 seconds.  You can prevent this by powering the microcontroller soleley
@@ -22,3 +24,8 @@ again when you are ready.
 Communication is adequately functional.  The UART receive works, including 
 the message handling.  The receiving is done using interrupts, but a send 
 queue still needs to be implemented.
+WARNING: The start byte has changed from 0x80 to 0xFF.
+The centers for the motor motor control have changed from 0 to 127.
+The center for the servo bump has changed from 0 to 1.
+This offest is taken care of by the receive, and should not affect the
+functionality of the device.

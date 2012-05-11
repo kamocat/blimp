@@ -69,8 +69,8 @@ ISR( BADISR_vect ) {
 
 ISR( USART1_RX_vect ) {
 	byte_received = UDR1;	// copy the data before it goes away
-	// Use -128 to signal a new message
-	if( byte_received == 0x80 ) {
+	// Use 255 to signal a new message
+	if( byte_received == 255 ) {
 		// Reset the counter and clear the array
 		for( byte_index = 0; byte_index < MSG_LENGTH; ++byte_index ) {
 			uart_rcvd[ (int) byte_index ] = 0;
@@ -83,9 +83,10 @@ ISR( USART1_RX_vect ) {
 
 		// If this is the last byte, update the buffered data.
 		if( byte_index == MSG_LENGTH ) {
-			lspeed = uart_rcvd[0];
-			rspeed = uart_rcvd[1];
-			inc_servo( uart_rcvd[2], &servo_angle );
+			lspeed = uart_rcvd[0] - 127;	// centers on 127
+			rspeed = uart_rcvd[1] - 127;	// centers on 127
+			inc_servo( (uart_rcvd[2] - 1),	// centers on 1
+					&servo_angle );	
 			
 			// Reset the watchdog
 			wdt_reset();

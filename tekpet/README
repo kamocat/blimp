@@ -1,10 +1,14 @@
 This is the repo for the tekpet.
 Currently the scheme for communication is to send four bytes:
-The first is the start byte (-128).
-The second is the speed of the left motor (int8_t)
-The third is the speed of the right motor (int8_t)
-The fourth is the increment of the servo (int8_t).
 
-The reason the start bit is -128 is because this provides a symmetrical
-command range, from -127 to 127, when using signed integers.  I've heard
-255 is more common, but I think it's silly to leave a hole in the range at -1.
+The first is the start byte (255).
+
+The second is the speed of the left motor (uint8_t, centered at 127)
+The third is the speed of the right motor (uint8_t, centered at 127)
+
+The fourth is the increment of the servo (uint8_t).  This value is unique
+because it does not directly set the position of the servo, it just sends
+whether to increment, decrement, or stay the same:
+2 - increment
+1 - stay the same
+0 - decrement
