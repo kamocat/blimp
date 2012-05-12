@@ -16,6 +16,13 @@
 #ifndef TEKPET_SERVO
 #define TEKPET_SERVO
 
+/*
+ * These servo constraints are tested with the ElectriFly ES50 Nano servo.
+ * Feel free to modify them to suit your needs.
+ */
+#define SERVO_MAX 100
+#define SERVO_MIN -105
+
 #define SERVO_CENTER 0x0580
 
 uint8_t init_servos (void) {
@@ -61,9 +68,16 @@ int8_t inc_servo( int8_t increment, int8_t *servo ) {
 
 	/* Catch overflows */
 	if( (increment > 0) && (new_angle < *servo) ) {
-		new_angle = 127;
+		new_angle = SERVO_MAX;
 	} else if( (increment < 0) && (new_angle > *servo) ) {
-		new_angle = -128;
+		new_angle = SERVO_MIN;
+	}
+
+	/* Keep value in range */
+	if( new_angle > SERVO_MAX ) {
+		new_angle = SERVO_MAX;
+	} else if( new_angle < SERVO_MIN ) {
+		new_angle = SERVO_MIN;
 	}
 	
 	*servo = new_angle;
