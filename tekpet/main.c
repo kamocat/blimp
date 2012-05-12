@@ -117,9 +117,9 @@ ISR( WDT_vect ) {
 	 * drive the motors down.  These values won't be overwritten by
 	 * anything else until a new message is received.
 	 */
-	servo_angle = 0;
-	lspeed = 0;
-	rspeed = 0;
+	servo_angle = -6;
+	lspeed = -15;
+	rspeed = -15;
 #endif
 
 
