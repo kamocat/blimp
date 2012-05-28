@@ -1,0 +1,20 @@
+This is the repo for the ork (OSURC Robotics Kit).
+It's actually no longer a blimp - instead, it's a robot.
+However, the code is similar enough that we've decided to keep the same
+repo.
+ork (OSURC Robotics Kit).
+It's actually no longer a blimp - instead, it's a robot.
+
+Currently the scheme for communication is to send three bytes:
+
+The first is the start byte (255).
+
+The second is the speed of the left motor (uint8_t, centered at 127)
+The third is the speed of the right motor (uint8_t, centered at 127)
+
+
+
+It's important to note that the atmega32u4 is very similar to the at90usb686,
+but different in a few ways:
+timer/counter3 only has one PWM output.
+(There are others, but I haven't looked into them yet)

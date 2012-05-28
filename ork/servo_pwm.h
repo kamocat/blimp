@@ -31,13 +31,15 @@ uint8_t init_servos (void) {
 	 * Bits 5:7 are PWM outputs A:C, so those are the ones we enable
 	 * as outputs.
 	 */
-	DDRB |= 0b11100000;
+	DDRB |= 0b11100000;	// timer1
+	DDRC |= 1<<6;	// timer3
 
 	/*
 	 * Set PWM A:C to clear at OCR match and set at TOP
 	 * Set mode to high-resolution fast-PWM
 	 */
 	TCCR1A = 0b10101010;
+	TCCR3A = 0b10000010;
 
 	/*
 	 * Set PWM top to be ICR1
@@ -45,14 +47,16 @@ uint8_t init_servos (void) {
 	 * NOTE: somehow that was too slow??? Currently scaled 1:1
 	 */
 	TCCR1B = 0b00011001;
+	TCCR3B = 0b00011001;
 
 	/* Set TOP.  We want 16,000, or 16 seconds */
 	ICR1 = 0x4000;
+	ICR3 = 0x4000;
 
 
 	/* Make sure the timer isn't disabled in Power Reduction Mode */
-	PRR0 = 0;
-
+	PRR0 &= ~(1<<PRTIM1);
+	PRR1 &= ~(1<<PRTIM3);
 	return 0;
 
 }
@@ -84,6 +88,15 @@ int8_t inc_servo( int8_t increment, int8_t *servo ) {
 	return new_angle;
 }
 
+/* 
+ * This struct could hold configuration information so that different
+ * servos or motor-controllers can be used on the same machine.
+ */
+struct pwmconfig {
+	uint16_t center;
+	int8_t scale;
+};
+
 
 /*
  * This function sets an individual servo, using the pointer to the
@@ -92,14 +105,14 @@ int8_t inc_servo( int8_t increment, int8_t *servo ) {
  * This sets servo A to be centered.
  * There are three servos: OCR1A, OCR1B, and OCR1C.
  */
-uint8_t set_servo( int8_t angle, volatile uint16_t *servo ) {
+uint8_t set_servo( int16_t angle, volatile uint16_t *servo ) {
 	/* 
 	 * Write out the PWM, so it's between 1 and 2ms 
 	 * This probably needs to be recalibrated when you switch
 	 * servos, as does the servo center.  
 	 * This feature could be added without too much difficulty.
 	 */
-	*servo = SERVO_CENTER + (int16_t)(angle) * 6;
+	*servo = SERVO_CENTER + angle * 6;
 
 	return 0;
 }

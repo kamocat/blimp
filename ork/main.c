@@ -5,18 +5,18 @@
 
 /** Constants */
 #define F_CPU 1000000U
-#define MOTOR_DIVIDE 3	// only use 1/3 full voltage
-#define INTERRUPT_DRIVEN_UART	// use interrupts for UART receive
-#define MSG_LENGTH 3	// there are only 3 bytes in our message
+// #define MOTOR_DIVIDE 3	// only use 1/3 full voltage
+// #define INTERRUPT_DRIVEN_UART	// use interrupts for UART receive
+#define MSG_LENGTH 2	// there are only 3 bytes in our message
 // #define WUNDERBOARD // we are testing on the tekpet right now
-#define WD_TIMEOUT 1000 // watchdog timeout after about 1 second
+// #define WD_TIMEOUT 1000 // watchdog timeout after about 1 second
 
 /** Includes */
 #include "watchdog.h"
 #include <avr/io.h>
 #include <util/delay.h>
-#include "rc_servo.h"	// enables sevo control
-#include "dc_motor.h"	// enables control of DC motors
+#include "servo_pwm.h"	// enables sevo-style PWM control
+// #include "dc_motor.h"	// enables control of DC motors
 #include "uart.h"	// for the serial communication
 
 /** Global Variables */
@@ -28,7 +28,7 @@ int8_t servo_angle;
 
 uint8_t init( void ) {
 	init_watchdog();
-	init_UART();
+	//init_UART();
 
 #ifdef WUNDERBOARD
 	DDRB = 0b11000000;
@@ -45,7 +45,7 @@ uint8_t init( void ) {
 	send_string("Device was reset\r\n");
 #else
 	init_servos();
-	init_dcmotors( 1 );
+	//init_dcmotors( 1 );
 #endif
 
 	// start interrupts
@@ -129,10 +129,12 @@ ISR( WDT_vect ) {
 int main( void ) {
 	init();
 
+	uint8_t i = 0;
 	while( 1 ) {
 		/* Motor control not merged yet */
-		set_servo( servo_angle, &OCR1A );
-		run_dcmotors( lspeed, rspeed );
+		set_servo( i, &OCR1A );
+		++i;
+		//run_dcmotors( lspeed, rspeed );
 		_delay_ms( 20 );	// wait long enough for the servo to update
 	}
 	return 0;
