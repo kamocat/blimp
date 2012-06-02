@@ -23,7 +23,8 @@
 #define SERVO_MAX 100
 #define SERVO_MIN -105
 
-#define SERVO_CENTER 0x0580
+#define SERVO_CENTER 0x0B00
+#define SERVO_TOP 0x8000	// 16 ms
 
 uint8_t init_servos (void) {
 	/*
@@ -50,8 +51,8 @@ uint8_t init_servos (void) {
 	TCCR3B = 0b00011001;
 
 	/* Set TOP.  We want 16,000, or 16 seconds */
-	ICR1 = 0x4000;
-	ICR3 = 0x4000;
+	ICR1 = SERVO_TOP;
+	ICR3 = SERVO_TOP;
 
 
 	/* Make sure the timer isn't disabled in Power Reduction Mode */
@@ -112,7 +113,7 @@ uint8_t set_servo( int16_t angle, volatile uint16_t *servo ) {
 	 * servos, as does the servo center.  
 	 * This feature could be added without too much difficulty.
 	 */
-	*servo = SERVO_CENTER + angle * 6;
+	*servo = SERVO_CENTER + angle * 12;
 
 	return 0;
 }
