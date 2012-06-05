@@ -29,10 +29,10 @@ int main( void ) {
 	int16_t rspeed = -1000;
 
 	while( 1 ) {
-		set_motor( &OCR1A, lspeed );
-		set_motor( &OCR1B, rspeed );
-		set_motor( &OCR1C, lspeed );
-		set_motor( &OCR3A, rspeed );
+		set_vic( &OCR1A, lspeed );
+		set_vic( &OCR1B, rspeed );
+		set_vic( &OCR1C, lspeed );
+		set_vic( &OCR3A, rspeed );
 		_delay_ms(100);
 	}
 	return 0;
