@@ -1,0 +1,181 @@
+
+final_project.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000130  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .stab         000006cc  00000000  00000000  00000184  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  2 .stabstr      00000054  00000000  00000000  00000850  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	4b c0       	rjmp	.+150    	; 0x98 <__ctors_end>
+   2:	00 00       	nop
+   4:	51 c0       	rjmp	.+162    	; 0xa8 <__bad_interrupt>
+   6:	00 00       	nop
+   8:	4f c0       	rjmp	.+158    	; 0xa8 <__bad_interrupt>
+   a:	00 00       	nop
+   c:	4d c0       	rjmp	.+154    	; 0xa8 <__bad_interrupt>
+   e:	00 00       	nop
+  10:	4b c0       	rjmp	.+150    	; 0xa8 <__bad_interrupt>
+  12:	00 00       	nop
+  14:	49 c0       	rjmp	.+146    	; 0xa8 <__bad_interrupt>
+  16:	00 00       	nop
+  18:	47 c0       	rjmp	.+142    	; 0xa8 <__bad_interrupt>
+  1a:	00 00       	nop
+  1c:	45 c0       	rjmp	.+138    	; 0xa8 <__bad_interrupt>
+  1e:	00 00       	nop
+  20:	43 c0       	rjmp	.+134    	; 0xa8 <__bad_interrupt>
+  22:	00 00       	nop
+  24:	41 c0       	rjmp	.+130    	; 0xa8 <__bad_interrupt>
+  26:	00 00       	nop
+  28:	3f c0       	rjmp	.+126    	; 0xa8 <__bad_interrupt>
+  2a:	00 00       	nop
+  2c:	3d c0       	rjmp	.+122    	; 0xa8 <__bad_interrupt>
+  2e:	00 00       	nop
+  30:	3b c0       	rjmp	.+118    	; 0xa8 <__bad_interrupt>
+  32:	00 00       	nop
+  34:	39 c0       	rjmp	.+114    	; 0xa8 <__bad_interrupt>
+  36:	00 00       	nop
+  38:	37 c0       	rjmp	.+110    	; 0xa8 <__bad_interrupt>
+  3a:	00 00       	nop
+  3c:	35 c0       	rjmp	.+106    	; 0xa8 <__bad_interrupt>
+  3e:	00 00       	nop
+  40:	33 c0       	rjmp	.+102    	; 0xa8 <__bad_interrupt>
+  42:	00 00       	nop
+  44:	31 c0       	rjmp	.+98     	; 0xa8 <__bad_interrupt>
+  46:	00 00       	nop
+  48:	2f c0       	rjmp	.+94     	; 0xa8 <__bad_interrupt>
+  4a:	00 00       	nop
+  4c:	2d c0       	rjmp	.+90     	; 0xa8 <__bad_interrupt>
+  4e:	00 00       	nop
+  50:	2b c0       	rjmp	.+86     	; 0xa8 <__bad_interrupt>
+  52:	00 00       	nop
+  54:	29 c0       	rjmp	.+82     	; 0xa8 <__bad_interrupt>
+  56:	00 00       	nop
+  58:	27 c0       	rjmp	.+78     	; 0xa8 <__bad_interrupt>
+  5a:	00 00       	nop
+  5c:	25 c0       	rjmp	.+74     	; 0xa8 <__bad_interrupt>
+  5e:	00 00       	nop
+  60:	23 c0       	rjmp	.+70     	; 0xa8 <__bad_interrupt>
+  62:	00 00       	nop
+  64:	48 c0       	rjmp	.+144    	; 0xf6 <__vector_25>
+  66:	00 00       	nop
+  68:	1f c0       	rjmp	.+62     	; 0xa8 <__bad_interrupt>
+  6a:	00 00       	nop
+  6c:	1d c0       	rjmp	.+58     	; 0xa8 <__bad_interrupt>
+  6e:	00 00       	nop
+  70:	1b c0       	rjmp	.+54     	; 0xa8 <__bad_interrupt>
+  72:	00 00       	nop
+  74:	19 c0       	rjmp	.+50     	; 0xa8 <__bad_interrupt>
+  76:	00 00       	nop
+  78:	17 c0       	rjmp	.+46     	; 0xa8 <__bad_interrupt>
+  7a:	00 00       	nop
+  7c:	15 c0       	rjmp	.+42     	; 0xa8 <__bad_interrupt>
+  7e:	00 00       	nop
+  80:	13 c0       	rjmp	.+38     	; 0xa8 <__bad_interrupt>
+  82:	00 00       	nop
+  84:	11 c0       	rjmp	.+34     	; 0xa8 <__bad_interrupt>
+  86:	00 00       	nop
+  88:	0f c0       	rjmp	.+30     	; 0xa8 <__bad_interrupt>
+  8a:	00 00       	nop
+  8c:	0d c0       	rjmp	.+26     	; 0xa8 <__bad_interrupt>
+  8e:	00 00       	nop
+  90:	0b c0       	rjmp	.+22     	; 0xa8 <__bad_interrupt>
+  92:	00 00       	nop
+  94:	09 c0       	rjmp	.+18     	; 0xa8 <__bad_interrupt>
+  96:	00 00       	nop
+
+00000098 <__ctors_end>:
+  98:	11 24       	eor	r1, r1
+  9a:	1f be       	out	0x3f, r1	; 63
+  9c:	cf ef       	ldi	r28, 0xFF	; 255
+  9e:	d0 e1       	ldi	r29, 0x10	; 16
+  a0:	de bf       	out	0x3e, r29	; 62
+  a2:	cd bf       	out	0x3d, r28	; 61
+  a4:	3c d0       	rcall	.+120    	; 0x11e <main>
+  a6:	42 c0       	rjmp	.+132    	; 0x12c <_exit>
+
+000000a8 <__bad_interrupt>:
+  a8:	ab cf       	rjmp	.-170    	; 0x0 <__vectors>
+
+000000aa <initialize>:
+  aa:	11 b8       	out	0x01, r1	; 1
+  ac:	80 ec       	ldi	r24, 0xC0	; 192
+  ae:	84 b9       	out	0x04, r24	; 4
+  b0:	8f ef       	ldi	r24, 0xFF	; 255
+  b2:	87 b9       	out	0x07, r24	; 7
+  b4:	88 e0       	ldi	r24, 0x08	; 8
+  b6:	8a b9       	out	0x0a, r24	; 10
+  b8:	87 e0       	ldi	r24, 0x07	; 7
+  ba:	8d b9       	out	0x0d, r24	; 13
+  bc:	10 ba       	out	0x10, r1	; 16
+  be:	08 95       	ret
+
+000000c0 <clearArray>:
+  c0:	18 b8       	out	0x08, r1	; 8
+  c2:	85 b1       	in	r24, 0x05	; 5
+  c4:	80 6c       	ori	r24, 0xC0	; 192
+  c6:	85 b9       	out	0x05, r24	; 5
+  c8:	85 b1       	in	r24, 0x05	; 5
+  ca:	8f 73       	andi	r24, 0x3F	; 63
+  cc:	85 b9       	out	0x05, r24	; 5
+  ce:	08 95       	ret
+
+000000d0 <InitializeUART>:
+  d0:	10 92 cd 00 	sts	0x00CD, r1
+  d4:	8c e0       	ldi	r24, 0x0C	; 12
+  d6:	80 93 cc 00 	sts	0x00CC, r24
+  da:	82 e0       	ldi	r24, 0x02	; 2
+  dc:	80 93 c8 00 	sts	0x00C8, r24
+  e0:	e9 ec       	ldi	r30, 0xC9	; 201
+  e2:	f0 e0       	ldi	r31, 0x00	; 0
+  e4:	88 e8       	ldi	r24, 0x88	; 136
+  e6:	80 83       	st	Z, r24
+  e8:	80 81       	ld	r24, Z
+  ea:	80 61       	ori	r24, 0x10	; 16
+  ec:	80 83       	st	Z, r24
+  ee:	86 e0       	ldi	r24, 0x06	; 6
+  f0:	80 93 ca 00 	sts	0x00CA, r24
+  f4:	08 95       	ret
+
+000000f6 <__vector_25>:
+  f6:	1f 92       	push	r1
+  f8:	0f 92       	push	r0
+  fa:	0f b6       	in	r0, 0x3f	; 63
+  fc:	0f 92       	push	r0
+  fe:	11 24       	eor	r1, r1
+ 100:	8f 93       	push	r24
+ 102:	ef 93       	push	r30
+ 104:	ff 93       	push	r31
+ 106:	ee ec       	ldi	r30, 0xCE	; 206
+ 108:	f0 e0       	ldi	r31, 0x00	; 0
+ 10a:	80 81       	ld	r24, Z
+ 10c:	80 83       	st	Z, r24
+ 10e:	ff 91       	pop	r31
+ 110:	ef 91       	pop	r30
+ 112:	8f 91       	pop	r24
+ 114:	0f 90       	pop	r0
+ 116:	0f be       	out	0x3f, r0	; 63
+ 118:	0f 90       	pop	r0
+ 11a:	1f 90       	pop	r1
+ 11c:	18 95       	reti
+
+0000011e <main>:
+ 11e:	d0 df       	rcall	.-96     	; 0xc0 <clearArray>
+ 120:	c4 df       	rcall	.-120    	; 0xaa <initialize>
+ 122:	d6 df       	rcall	.-84     	; 0xd0 <InitializeUART>
+ 124:	78 94       	sei
+ 126:	80 e8       	ldi	r24, 0x80	; 128
+ 128:	85 b9       	out	0x05, r24	; 5
+ 12a:	ff cf       	rjmp	.-2      	; 0x12a <main+0xc>
+
+0000012c <_exit>:
+ 12c:	f8 94       	cli
+
+0000012e <__stop_program>:
+ 12e:	ff cf       	rjmp	.-2      	; 0x12e <__stop_program>
