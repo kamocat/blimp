@@ -1,6 +1,7 @@
 /**
- This is the code for the tekpet, which uses an AT90USB646
- Currently we are making sure the serial communication works
+ * This is code for the ORK, which uses an AtMega32U4 running at 16MHz.
+ * Currently we are testing the communication to the Victor 884 motor
+ * controllers to make sure it will work for our project.
  */
 
 /** Constants */
