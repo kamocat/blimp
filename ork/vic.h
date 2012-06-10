@@ -4,6 +4,8 @@
 #include <avr/io.h>
 uint8_t init_vic( void ) {
 	DDRB |= 0xE0;	// turn on PWM outputs
+	DDRC |= 1<<6;
+
 	TCCR1A = 0b10101010;	// fast PWM, 16 bit
 	TCCR3A = 0b10000010;
 

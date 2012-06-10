@@ -26,6 +26,7 @@ uint8_t init( void ) {
 
 
 int main( void ) {
+	init();
 	int16_t lspeed = 1000;
 	int16_t rspeed = -1000;
 
