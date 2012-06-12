@@ -14,8 +14,8 @@
 #include "uart.h"
 
 /** Global Variables */
-int16_t lspeed = 0;
-int16_t rspeed = 0;
+volatile int16_t lspeed = 0;
+volatile int16_t rspeed = 0;
 
 /** Functions */
 
@@ -58,10 +58,11 @@ ISR( USART1_RX_vect ) {
 
 		// If this is the last byte, update the buffered data.
 		if( byte_index == MSG_LENGTH ) {
-			lspeed = uart_rcvd[0] - 127;	// centers on 127
-			rspeed = uart_rcvd[1] - 127;	// centers on 127
+			lspeed = (uart_rcvd[0] - 127) * 8;	// centers on 127
+			rspeed = (uart_rcvd[1] - 127) * -8;	// centers on 127
 
 			PORTB ^= 1;
+			//send_string("Packet received\r\n");
 		}
 	}
 
@@ -80,7 +81,7 @@ int main( void ) {
 		set_vic( &OCR1B, rspeed );
 		set_vic( &OCR1C, lspeed );
 		set_vic( &OCR3A, rspeed );
-		_delay_ms(500);
+		_delay_ms(20);
 	}
 	return 0;
 }
