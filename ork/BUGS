@@ -3,7 +3,7 @@ As you find a fix for them, it's not neccesary to delete the old comments,
 and is often more useful to instead explain what you did to fix it.
 
 
-UART needs to be changed to work on 16MHz.
+UART was changed to work on 16MHz.
 
 Communication is adequately functional.  The UART receive works, including 
 the message handling.  The receiving is done using interrupts, but a send 

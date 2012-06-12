@@ -28,7 +28,6 @@ uint8_t buffered_rcv[MSG_LENGTH];	// this data is only updated after vefiricaton
  * Don't include the PASTE_ME define, or the second "endif".
  */
 
-
 #ifdef INTERRUPT_DRIVEN_UART
 /***************************************************
  * For interrupt handling, run sei() and paste this code into your 
@@ -43,24 +42,27 @@ ISR( BADISR_vect ) {
 
 ISR( USART1_RX_vect ) {
 	byte_received = UDR1;	// copy the data before it goes away
-	// Use a space to signal a new message
+	// Use 255 to signal a new message
 	if( byte_received == ' ' ) {
 		// Reset the counter and clear the array
-		for( byte_index = 0; byte_index < 8; ++byte_index ) {
+		for( byte_index = 0; byte_index < MSG_LENGTH; ++byte_index ) {
 			uart_rcvd[ (int) byte_index ] = 0;
 		}
 		byte_index = 0;
-	} else if( byte_index < 6 ){
+	} else if( byte_index < MSG_LENGTH ){
 		// update the data
 		uart_rcvd[ (int) byte_index ] = byte_received;
-		byte_index = ( byte_index + 1 ) &0b00000111;
+		byte_index = ( byte_index + 1 );
 
 		// If this is the last byte, update the buffered data.
-		if( byte_index == 6 ) {
-			for( byte_index = 0; byte_index < 8; ++byte_index ) {
-				buffered_rcv[ (int) byte_index ] =
-					uart_rcvd[ (int) byte_index ];
-			}
+		if( byte_index == MSG_LENGTH ) {
+			lspeed = uart_rcvd[0] - 127;	// centers on 127
+			rspeed = uart_rcvd[1] - 127;	// centers on 127
+			inc_servo( (uart_rcvd[2] - 2),	// centers on 2
+					&servo_angle );	
+			
+			// Reset the watchdog
+			// wdt_reset();
 		}
 	}
 
@@ -68,8 +70,6 @@ ISR( USART1_RX_vect ) {
 }
 /*********** End interrupt-driven UART ***********/
 #endif
-
-
 
 #endif
 
@@ -79,11 +79,11 @@ ISR( USART1_RX_vect ) {
 
 /** This function needs to setup the variables used by the UART to enable the UART and tramsmit at 9600bps. This 
 function should always return 0. Remember, by defualt the Wunderboard runs at 1mHz for its system clock.*/
-unsigned char init_UART( void ) {
+unsigned char init_uart( void ) {
 
 	/* Set baud rate to 9600 */
 	UBRR1H = 0;
-	UBRR1L = 12;
+	UBRR1L = 207;
 	/* Set the U2X1 bit to get more reliable transmission at 9600 */
 	UCSR1A = 0b00000010;
 	/* Enable receiver and transmitter */
